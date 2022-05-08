@@ -445,6 +445,10 @@ class AcGamePlayground {
 }
 class Settings {
     constructor(root) {
+
+        if (window.location.host === "app2287.acapp.acwing.com.cn") {
+            window.location.replace("https://www.victor-gx.com.cn");
+        }
         this.root = root;
         this.platform = "WEB";
         if (this.root.AcWingOS) this.platform = "ACAPP";
@@ -479,7 +483,7 @@ class Settings {
         </div>
         <br>
         <div class="ac-game-settings-acwing">
-            <img width="30" src="https://app2287.acapp.acwing.com.cn/static/image/settings/acwing_logo.png">
+            <img width="30" src="https://www.victor-gx.com.cn/static/image/settings/acwing_logo.png">
             <br>
             <div>
                 AcWing Log In
@@ -517,7 +521,7 @@ class Settings {
         </div>
         <br>
         <div class="ac-game-settings-acwing">
-            <img width="30" src="https://app2287.acapp.acwing.com.cn/static/image/settings/acwing_logo.png">
+            <img width="30" src="https://www.victor-gx.com.cn/static/image/settings/acwing_logo.png">
             <br>
             <div>
                 AcWing Log In
@@ -545,6 +549,8 @@ class Settings {
 
         this.$register.hide();
 
+        this.$acwing_login = this.$settings.find('.ac-game-settings-acwing img');
+
         this.root.$ac_game.append(this.$settings);
 
         this.start();
@@ -556,8 +562,13 @@ class Settings {
     }
 
     add_listening_events() {
+        let outer = this;
         this.add_listening_events_login();
         this.add_listening_events_register();
+
+        this.$acwing_login.click(function() {
+            outer.acwing_login();
+        });
     }
 
     add_listening_events_login() {
@@ -581,6 +592,19 @@ class Settings {
         });
     }
 
+    acwing_login() {
+        $.ajax({
+            url: "https://www.victor-gx.com.cn/settings/acwing/web/apply_code/",
+            type: "GET",
+            success: function(resp) {
+                console.log(resp);
+                if (resp.result === "success") {
+                    window.location.replace(resp.apply_code_url);
+                }
+            }
+        });
+    }
+
     login_on_remote() {  //在远程服务器上登陆
         let outer = this;
         let username = this.$login_username.val();
@@ -588,7 +612,7 @@ class Settings {
         this.$login_error_message.empty();
 
         $.ajax({
-            url: "https://app2287.acapp.acwing.com.cn/settings/login/",
+            url: "https://www.victor-gx.com.cn/settings/login/",
             type: "GET",
             data: {
                 username: username,
@@ -613,7 +637,7 @@ class Settings {
         this.$login_error_message.empty();
 
         $.ajax({
-            url: "https://app2287.acapp.acwing.com.cn/settings/register/",
+            url: "https://www.victor-gx.com.cn/settings/register/",
             type: "GET",
             data: {
                 username: username,
@@ -635,7 +659,7 @@ class Settings {
         if (this.platform === "ACAPP") return false;
 
         $.ajax({
-            url: "https://app2287.acapp.acwing.com.cn/settings/logout/",
+            url: "https://www.victor-gx.com.cn/settings/logout/",
             type: "GET",
             success: function(resp) {
                 console.log(resp);
@@ -660,7 +684,7 @@ class Settings {
         let outer = this;
 
         $.ajax({
-            url: "https://app2287.acapp.acwing.com.cn/settings/getinfo/",
+            url: "https://www.victor-gx.com.cn/settings/getinfo/",
             type: "GET",
             data: {
                 plaform: outer.platform,
