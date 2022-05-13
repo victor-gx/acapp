@@ -21,24 +21,25 @@ def receive_code(request):
 
     if not cache.has_key(state):
         return JsonResponse({
-            'result': "state not exiest"
+            'result': "state not exist"
         })
     cache.delete(state)
 
     apply_access_token_url = "https://www.acwing.com/third_party/api/oauth2/access_token/"
     params = {
-        'appid': "2287",
-        'secret': "f5ba39f3cce3429ca4cb889e33265956",
+        'appid': "165",
+        'secret': "2a79c385f35e4533ab803031fab68e3d",
         'code': code
     }
 
     access_token_res = requests.get(
         apply_access_token_url, params=params).json()
+
     access_token = access_token_res['access_token']
     openid = access_token_res['openid']
 
     players = Player.objects.filter(openid=openid)
-    if players.exists():
+    if players.exists():  # 如果该用户已存在，则无需重新获取信息，直接登录即可
         player = players[0]
         return JsonResponse({
             'result': "success",
@@ -55,7 +56,7 @@ def receive_code(request):
     username = userinfo_res['username']
     photo = userinfo_res['photo']
 
-    while User.objects.filter(username=username).exists():
+    while User.objects.filter(username=username).exists():  # 找到一个新用户名
         username += str(randint(0, 9))
 
     user = User.objects.create(username=username)

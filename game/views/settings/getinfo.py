@@ -3,7 +3,7 @@ from game.models.player.player import Player
 
 
 def getinfo_acapp(request):
-    player = Player.objects.get(user=user)
+    player = Player.objects.all()[0]
     return JsonResponse({
         'result': "success",
         'username': player.user.username,
@@ -27,9 +27,9 @@ def getinfo_web(request):
 
 
 def getinfo(request):
-    platform = request.GET.get('platform')
-    if platform == "ACAPP":
+    platforms = request.GET.get('platforms')
+    # platforms = "ACAPP"
+    if platforms == "ACAPP":
         return getinfo_acapp(request)
-    # elif platform == "WEB":
-    else:
+    elif platforms == "WEB":
         return getinfo_web(request)

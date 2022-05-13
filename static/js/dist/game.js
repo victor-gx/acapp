@@ -450,8 +450,8 @@ class Settings {
             window.location.replace("https://www.victor-gx.com.cn");
         }
         this.root = root;
-        this.platform = "WEB";
-        if (this.root.AcWingOS) this.platform = "ACAPP";
+        this.platforms = "WEB";
+        if (this.root.AcWingOS) this.platforms = "ACAPP";
         this.username = "";
         this.photo = "";
 
@@ -557,13 +557,18 @@ class Settings {
     }
 
     start() {
-        if (this.platform === "ACAPP") {
+        if (this.platforms === "ACAPP") {
             this.getinfo_acapp();
         } else {
             this.getinfo_web();
             this.add_listening_events();
         }
     }
+
+    // start() {
+    //     this.getinfo_web();
+    //     this.add_listening_events();
+    // }
 
     add_listening_events() {
         let outer = this;
@@ -660,7 +665,7 @@ class Settings {
     }
 
     logout_on_remote() {
-        if (this.platform === "ACAPP") return false;
+        if (this.platforms === "ACAPP") return false;
 
         $.ajax({
             url: "https://www.victor-gx.com.cn/settings/logout/",
@@ -699,6 +704,7 @@ class Settings {
         });
     }
 
+
     getinfo_acapp() {
         let outer = this;
 
@@ -706,7 +712,9 @@ class Settings {
             url: "https://www.victor-gx.com.cn/settings/acwing/acapp/apply_code/",
             type: "GET",
             success: function(resp) {
+                console.log(resp.result);
                 if (resp.result === "success") {
+                    console.log(resp.state);
                     outer.acapp_login(resp.appid, resp.redirect_uri, resp.scope, resp.state);
                 }
             }
@@ -720,7 +728,7 @@ class Settings {
             url: "https://www.victor-gx.com.cn/settings/getinfo/",
             type: "GET",
             data: {
-                platform: outer.platform,
+                platforms: outer.platforms,
             },
             success: function(resp) {
                 console.log(resp);
