@@ -12,13 +12,19 @@ class GameMap extends AcGameObject {
     start() {
     }
 
+    resize() {
+        this.ctx.canvas.wigth = this.playground.wigth;
+        this.ctx.canvas.height = this.playground.height;
+        this.ctx.fillStyle = "rgb(0, 0, 0, 1)";
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    }
+
     update() {
         this.render();
     }
 
     render() {
-        this.ctx.fillStyle = "rgb(0, 0, 0)";
-        // this.ctx.fillStyle = "#FF0000";
+        this.ctx.fillStyle = "rgb(0, 0, 0, 0.2)";
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
 }

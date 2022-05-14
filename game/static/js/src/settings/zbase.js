@@ -111,19 +111,19 @@ class Settings {
         this.start();
     }
 
-    start() {
-        if (this.platforms === "ACAPP") {
-            this.getinfo_acapp();
-        } else {
-            this.getinfo_web();
-            this.add_listening_events();
-        }
-    }
-
     // start() {
-    //     this.getinfo_web();
-    //     this.add_listening_events();
+    //     if (this.platforms === "ACAPP") {
+    //         this.getinfo_acapp();
+    //     } else {
+    //         this.getinfo_web();
+    //         this.add_listening_events();
+    //     }
     // }
+
+    start() {
+        this.getinfo_web();
+        this.add_listening_events();
+    }
 
     add_listening_events() {
         let outer = this;
