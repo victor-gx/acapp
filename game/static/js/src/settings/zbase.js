@@ -220,18 +220,20 @@ class Settings {
     }
 
     logout_on_remote() {
-        if (this.platforms === "ACAPP") return false;
-
-        $.ajax({
-            url: "https://www.victor-gx.com.cn/settings/logout/",
-            type: "GET",
-            success: function(resp) {
-                console.log(resp);
-                if (resp.result === "success") {
-                    location.reload(); // 刷新页面
+        if (this.platforms === "ACAPP") {
+            this.root.AcWingOS.api.window.close();
+        } else {
+            $.ajax({
+                url: "https://www.victor-gx.com.cn/settings/logout/",
+                type: "GET",
+                success: function(resp) {
+                    console.log(resp);
+                    if (resp.result === "success") {
+                        location.reload(); // 刷新页面
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     register() {
