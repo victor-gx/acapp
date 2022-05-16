@@ -250,8 +250,6 @@ class Settings {
         let outer = this;
 
         this.root.AcWingOS.api.oauth2.authorize(appid, redirect_uri, scope, state, function(resp) {
-            console.log("called from acapp_login function");
-            console.log(resp);
             if (resp.result === "success") {
                 outer.username = resp.username;
                 outer.photo = resp.photo;
@@ -261,7 +259,6 @@ class Settings {
         });
     }
 
-
     getinfo_acapp() {
         let outer = this;
 
@@ -269,9 +266,7 @@ class Settings {
             url: "https://www.victor-gx.com.cn/settings/acwing/acapp/apply_code/",
             type: "GET",
             success: function(resp) {
-                console.log(resp.result);
                 if (resp.result === "success") {
-                    console.log(resp.state);
                     outer.acapp_login(resp.appid, resp.redirect_uri, resp.scope, resp.state);
                 }
             }
@@ -309,4 +304,5 @@ class Settings {
         this.$Settings.show();
     }
 }
+
 
