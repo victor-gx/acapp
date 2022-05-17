@@ -6,19 +6,20 @@ sys.path.insert(0, glob.glob('../../')[0])
 
 from match_server.match_service import Match
 
-from asgiref.sync import async_to_sync
-from acapp.asgi import channel_layer
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
+
 from queue import Queue
 from time import sleep
 from threading import Thread
 
+from asgiref.sync import async_to_sync
+from acapp.asgi import channel_layer
+from django.core.cache import cache
 
 queue = Queue()  # 消息队列
-
 
 class Pool:
     def __init__(self):
@@ -29,15 +30,14 @@ class Pool:
         self.players.append(player)
 
     def check_match(self, a, b):
-        dt = abs(a.score, b.score)
+        dt = abs(a.score - b.score)
         a_max_dif = a.waiting_time * 50
         b_max_dif = b.waiting_time * 50
         return dt <= a_max_dif and dt <= b_max_dif
 
-    def match_success(self, pa):
-        print("Match Success: %s %s %s" %
-              (ps[0].username, ps[1].username, ps[2].username))
-        room_name = "room-%s-%s-%s" % (pa[0].uuid, ps[1].uuid, ps[2].uuid)
+    def match_success(self, ps):
+        print("Match Success: %s %s %s" % (ps[0].username, ps[1].username, ps[2].username))
+        room_name = "room-%s-%s-%s" % (ps[0].uuid, ps[1].uuid, ps[2].uuid)
         players = []
         for p in ps:
             async_to_sync(channel_layer.group_add)(room_name, p.channel_name)
